@@ -5,6 +5,15 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+const path = require('path');
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// SPA fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
 
 const server = http.createServer(app);
 const io = new Server(server, {
