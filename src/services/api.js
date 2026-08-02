@@ -34,6 +34,13 @@ export class TrackerAPI {
       }
     };
   }
+
+  // Report a manual sighting to the server
+  reportSighting(sightingData) {
+    if (this.socket) {
+      this.socket.emit('REPORT_SIGHTING', sightingData);
+    }
+  }
 }
 
 // Export singleton instance

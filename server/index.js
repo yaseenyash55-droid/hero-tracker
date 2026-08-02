@@ -184,6 +184,23 @@ io.on('connection', (socket) => {
   // Send current state to new client
   socket.emit('INITIAL_STATE', activeSightings);
 
+  socket.on('REPORT_SIGHTING', (data) => {
+    // Generate a unique ID and timestamp for the manual report
+    const manualSighting = {
+      ...data,
+      id: Math.random().toString(36).substr(2, 9),
+      timestamp: new Date().toISOString(),
+      status: 'MANUAL_REPORT'
+    };
+    
+    // Add to active sightings list
+    activeSightings = [manualSighting, ...activeSightings].slice(0, 50);
+    
+    // Broadcast immediately to everyone including sender
+    io.emit('NEW_SIGHTING', manualSighting);
+    console.log(`Manual Incident Reported: ${manualSighting.hero.name} at ${manualSighting.location.name}`);
+  });
+
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
   });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import HeroMap from './components/HeroMap';
 import SightingFeed from './components/SightingFeed';
+import ReportModal from './components/ReportModal';
 import { api } from './services/api';
 import { Shield, Target, Volume2, VolumeX } from 'lucide-react';
 import './index.css';
@@ -12,6 +13,7 @@ function App() {
   const [isMuted, setIsMuted] = useState(true);
   const [manualOverride, setManualOverride] = useState(false);
   const [selectedSighting, setSelectedSighting] = useState(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   
   const isMutedRef = React.useRef(isMuted);
   useEffect(() => {
@@ -132,6 +134,30 @@ function App() {
           </div>
         </div>
 
+        <button 
+          onClick={() => setIsReportModalOpen(true)}
+          style={{
+            margin: '20px 0',
+            padding: '12px',
+            width: '100%',
+            background: 'linear-gradient(45deg, #ff4444, #cc0000)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '10px',
+            textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+            boxShadow: '0 4px 15px rgba(255, 68, 68, 0.3)',
+            fontFamily: 'Orbitron, sans-serif'
+          }}
+        >
+          <Target size={18} /> REPORT INCIDENT
+        </button>
+
         <div className="filter-title" style={{ marginTop: 'auto', paddingTop: '20px' }}>
           Recent Sightings ({filteredSightings.length})
         </div>
@@ -146,6 +172,10 @@ function App() {
           setSelectedSighting={setSelectedSighting}
         />
       </main>
+
+      {isReportModalOpen && (
+        <ReportModal onClose={() => setIsReportModalOpen(false)} />
+      )}
     </div>
   );
 }
